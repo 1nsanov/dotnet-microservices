@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using Person.Domain.Common;
-using Person.Domain.Exceptions;
+using BuildingBlocks.Domain.Common;
+using BuildingBlocks.Domain.Exceptions;
 
 namespace Person.Domain.ValueObjects;
 

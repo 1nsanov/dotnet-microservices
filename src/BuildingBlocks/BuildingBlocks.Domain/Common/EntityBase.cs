@@ -1,4 +1,4 @@
-﻿namespace Person.Domain.Common;
+﻿namespace BuildingBlocks.Domain.Common;
 
 public abstract class EntityBase : IEquatable<EntityBase>
 {
@@ -20,7 +20,7 @@ public abstract class EntityBase : IEquatable<EntityBase>
 
     public bool IsTransient()
     {
-        return Id == default;
+        return Id == Guid.Empty;
     }
 
     public override bool Equals(object? obj)

@@ -1,4 +1,4 @@
-﻿namespace Person.Domain.Common;
+﻿namespace BuildingBlocks.Domain.Common;
 
 public abstract class ValueObjectBase : IEquatable<ValueObjectBase>
 {

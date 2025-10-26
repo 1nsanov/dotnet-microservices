@@ -1,5 +1,5 @@
-﻿using Person.Domain.Common;
-using Person.Domain.Exceptions;
+﻿using BuildingBlocks.Domain.Common;
+using BuildingBlocks.Domain.Exceptions;
 using Person.Domain.ValueObjects;
 
 namespace Person.Domain.Entities;
