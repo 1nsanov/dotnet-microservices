@@ -1,4 +1,4 @@
-namespace Person.Domain.Exceptions;
+namespace BuildingBlocks.Domain.Exceptions;
 
 public class InvalidValueObjectException : DomainException
 {
