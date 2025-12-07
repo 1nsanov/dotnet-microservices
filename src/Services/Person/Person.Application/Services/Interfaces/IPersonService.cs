@@ -9,7 +9,7 @@ public interface IPersonService
     Task<PersonResponse> CreateAsync(CreatePersonRequest request, CancellationToken ct);
     Task<PersonResponse> UpdateAsync(Guid personId, UpdatePersonRequest request, CancellationToken ct);
     Task<PersonResponse> GetByIdAsync(Guid personId, CancellationToken ct);
-    Task<PersonResponse> GetAllAsync(CancellationToken ct);
+    Task<IReadOnlyList<PersonResponse>> GetAllAsync(CancellationToken ct);
     Task<PersonResponse> DeleteAsync(Guid personId, CancellationToken ct);
 
     // Work experience operations
