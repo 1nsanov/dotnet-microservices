@@ -24,6 +24,11 @@ public class PersonService : IPersonService
 
     public async Task<PersonResponse> CreateAsync(CreatePersonRequest request, CancellationToken ct)
     {
+        if (await _personRepository.ExistsByEmailAsync(request.Email, cancellationToken: ct))
+        {
+            throw new DuplicateException(nameof(Domain.Entities.Person), "Email", request.Email);
+        }
+
         var person = _mapper.Map<Domain.Entities.Person>(request);
 
         await _personRepository.AddAsync(person, ct);
@@ -36,10 +41,16 @@ public class PersonService : IPersonService
     {
         var person = await GetPersonByIdOrThrowAsync(personId, ct);
 
-        var fullName = new Domain.ValueObjects.FullName(request.Surname, request.FirstName, request.Patronymic);
-        var phone = new Domain.ValueObjects.Phone(request.Phone);
+        if (await _personRepository.ExistsByEmailAsync(request.Email, personId, ct))
+        {
+            throw new DuplicateException(nameof(Domain.Entities.Person), "Email", request.Email);
+        }
 
-        person.UpdatePersonalInfo(fullName, phone, request.Gender, request.Comment);
+        var fullName = new FullName(request.Surname, request.FirstName, request.Patronymic);
+        var email = new Email(request.Email);
+        var phone = new Phone(request.Phone);
+
+        person.UpdatePersonalInfo(fullName, email, phone, request.DateBirth, request.Gender, request.Comment);
 
         await _personRepository.UpdateAsync(person, ct);
         await _unitOfWork.SaveChangesAsync(ct);

@@ -29,6 +29,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings__DefaultConnection=Host=db;Database=PersonDb;Username=admin;Password=admin1234567890;Port=5432;Pooling=true;"
       - "Database__AutoMigrate=true"
+      - AutoMapper__LicenseKey=${AUTOMAPPER_LICENSE_KEY}
     depends_on:
       db:
         condition: service_healthy

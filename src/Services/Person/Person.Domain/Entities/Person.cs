@@ -48,10 +48,12 @@ public class Person : EntityBase, IAggregateRoot
         return new Person(fullName, email, phone, dateBirth, gender, comment);
     }
 
-    public void UpdatePersonalInfo(FullName fullName, Phone phone, Gender gender, string? comment)
+    public void UpdatePersonalInfo(FullName fullName, Email email, Phone phone, DateTime dateBirth, Gender gender, string? comment)
     {
         FullName = fullName ?? throw new InvalidEntityException(nameof(Person), "FullName cannot be null");
+        Email = email ?? throw new InvalidEntityException(nameof(Person), "Email cannot be null");
         Phone = phone ?? throw new InvalidEntityException(nameof(Person), "Phone cannot be null");
+        DateBirth = ValidateDateBirth(dateBirth);
         Gender = ValidateGender(gender);
         Comment = ValidateComment(comment);
         SetLastModifiedDate();

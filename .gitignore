@@ -368,4 +368,6 @@ fabric.properties
 # Appsettings
 **/appsettings.Development.json
 
+.env*
+
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore,dotnetcore,rider

@@ -27,7 +27,7 @@ public static class HostingExtensions
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddInfrastructureServices(builder.Configuration);
-            builder.Services.AddApplicationServices();
+            builder.Services.AddApplicationServices(builder.Configuration);
             
             builder.Services.AddCustomSwagger();
             
@@ -40,6 +40,8 @@ public static class HostingExtensions
         public WebApplication ConfigurePipeline()
         {
             app.ApplyMigrations();
+            
+            app.UseExceptionHandler();
             
             if (app.Environment.IsDevelopment())
             {
