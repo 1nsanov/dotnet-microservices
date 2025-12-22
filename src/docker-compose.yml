@@ -1,0 +1,44 @@
+version: '3.4'
+
+x-db-env: &db-env
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: admin1234567890
+
+services:
+  db:
+    image: postgres:latest
+    container_name: dotnet-microservice-db
+    environment:
+      <<: *db-env
+      POSTGRES_DB: PersonDb
+    ports:
+      - "5432:5432"
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - dotnet-microservices_postgres_data:/var/lib/postgresql/
+        
+  person.api:
+    image: ${DOCKER_REGISTRY-}personapi
+    container_name: person.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings__DefaultConnection=Host=db;Database=PersonDb;Username=admin;Password=admin1234567890;Port=5432;Pooling=true;"
+      - "Database__AutoMigrate=true"
+      - AutoMapper__LicenseKey=${AUTOMAPPER_LICENSE_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "7100:8080"
+      - "7101:8081"
+    build:
+      context: .
+      dockerfile: Services/Person/Person.API/Dockerfile
+
+volumes:
+  dotnet-microservices_postgres_data:
