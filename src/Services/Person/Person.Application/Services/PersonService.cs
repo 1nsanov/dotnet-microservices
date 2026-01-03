@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BuildingBlocks.Application.Exceptions;
 using BuildingBlocks.Application.Interfaces;
+using BuildingBlocks.Domain.Exceptions;
 using Person.Application.Contracts.Requests;
 using Person.Application.Contracts.Responses;
 using Person.Application.Interfaces.Repositories;
@@ -101,9 +102,16 @@ public class PersonService : IPersonService
     {
         var person = await GetPersonByIdOrThrowAsync(personId, ct);
 
-        person.UpdateWorkExperience(workExperienceId, request.Position, request.Organization,
-            new Address(request.CountryCode, request.City, request.Street, request.HouseNumber, request.PostalCode,
-                request.Apartment), request.Description, request.DateEmployment, request.DateTermination);
+        try
+        {
+            person.UpdateWorkExperience(workExperienceId, request.Position, request.Organization,
+                new Address(request.CountryCode, request.City, request.Street, request.HouseNumber, request.PostalCode,
+                    request.Apartment), request.Description, request.DateEmployment, request.DateTermination);
+        }
+        catch (InvalidEntityException)
+        {
+            throw new NotFoundException(nameof(Domain.Entities.WorkExperience), workExperienceId);
+        }
 
         await _personRepository.UpdateAsync(person, ct);
         await _unitOfWork.SaveChangesAsync(ct);
@@ -116,7 +124,15 @@ public class PersonService : IPersonService
     {
         var person = await GetPersonByIdOrThrowAsync(personId, ct);
 
-        person.RemoveWorkExperience(workExperienceId);
+        try
+        {
+            person.RemoveWorkExperience(workExperienceId);
+        }
+        catch (InvalidEntityException)
+        {
+            throw new NotFoundException(nameof(Domain.Entities.WorkExperience), workExperienceId);
+        }
+
         await _personRepository.UpdateAsync(person, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
